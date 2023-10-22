@@ -8,7 +8,7 @@ import logging
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
-source_dir = 'C:\\Users\\Ash\\Downloads'
+source_dir = 'D:\\Downloads'
 
 audio_extensions = [".m4a", ".flac", "mp3", ".wav", ".wma", ".aac"]
 
@@ -22,8 +22,17 @@ image_extensions = [".jpg", ".jpeg", ".jpe", ".jif", ".jfif", ".jfi", ".png", ".
                 
 document_extensions = [".doc", ".docx", ".odt", ".pdf", ".xls", ".xlsx", ".ppt", ".pptx"]
 
+def make_unique(dest, name):
+    filename, extension = splitext(name)
+    counter = 1
+    while exists(f"{dest}/{name}"):
+        name = f"{filename}({str(counter)}){extension}"
+        counter += 1
+    return name
+
 def move_file(dest, entry):
     if exists(f"{dest}/{name}"):
+        unique_name = make_unique(dest, name)
         oldName = join(dest, name)
         newName = join(dest, unique_name)
         rename(oldName, newName)
