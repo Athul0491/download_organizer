@@ -5,4 +5,5 @@ Automate desktop files and your downloads section using this application based o
 ### Future Scope
 
 Convert this app into a background process
+
 _Preferably by using a faster language_
