@@ -22,6 +22,8 @@ image_extensions = [".jpg", ".jpeg", ".jpe", ".jif", ".jfif", ".jfi", ".png", ".
                 
 document_extensions = [".doc", ".docx", ".odt", ".pdf", ".xls", ".xlsx", ".ppt", ".pptx"]
 
+compressed_extensions = [".7z", ".arj", ".deb", ".pkg", ".rar", ".rpm", ".tar.gz", ".z", ".zip"]
+
 def make_unique(dest, name):
     filename, extension = splitext(name)
     counter = 1
@@ -77,6 +79,12 @@ class MoverHandler(FileSystemEventHandler){
             if name.endswith(documents_extension) or name.endswith(documents_extension.upper()):
                 move_file(dest_dir_documents, entry, name)
                 logging.info(f"Moved document file: {name}")
+    
+    def check_compressed_files(self, entry, name):
+        for compressed_extension in compressed_extensions:
+            if name.endswith(compressed_extension) or name.endswith(compressed_extension.upper()):
+                move_file(dest_dir_compressed, entry, name)
+                logging.info(f"Moved compressed file: {name}")
 
 }
 
