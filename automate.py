@@ -8,9 +8,12 @@ from watchdog.events import FileSystemEventHandler
 
 source_dir = 'C:\\Users\\Ash\\Downloads'
 
-with os.scandir(source_dir) as entries:
-    for entry in entries:
-        print(entry.name)
+def move_file(dest, entry):
+    if exists(f"{dest}/{name}"):
+        oldName = join(dest, name)
+        newName = join(dest, unique_name)
+        rename(oldName, newName)
+    move(entry, dest)
 
 class MoverHandler(FileSystemEventHandler){
     def on_modified(self, event):
@@ -23,6 +26,16 @@ class MoverHandler(FileSystemEventHandler){
                 self.check_document_files(entry, name)
                 self.check_compressed_files(entry, name)
                 self.check_executable_files(entry, name)
+
+    def check_audio_files(self, entry, name):  # * Checks all Audio Files
+        for audio_extension in audio_extensions:
+            if name.endswith(audio_extension) or name.endswith(audio_extension.upper()):
+                if entry.stat().st_size < 10_000_000 or "SFX" in name:  # ? 10Megabytes
+                    dest = dest_dir_sfx
+                else:
+                    dest = dest_dir_music
+                move_file(dest, entry, name)
+                logging.info(f"Moved audio file: {name}")
 }
 
 if __name__ == "__main__":
