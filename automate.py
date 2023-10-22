@@ -9,6 +9,13 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
 source_dir = 'D:\\Downloads'
+dest_dir_sfx = "D:\\Downloads\\SFX"
+dest_dir_music = "D:\\Downloads\\Music"
+dest_dir_video = "D:\\Downloads\\Video"
+dest_dir_image = "D:\\Downloads\\Image"
+dest_dir_documents = "D:\\Downloads\\Documents"
+dest_dir_compressed = "D:\\Downloads\\Compressed"
+dest_dir_executable = "D:\\Downloads\\Executable"
 
 audio_extensions = [".m4a", ".flac", "mp3", ".wav", ".wma", ".aac"]
 
