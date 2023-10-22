@@ -1,8 +1,10 @@
-import os
-from os.path import join
+from os import scandir, rename
+from os.path import join, exists
 from time import sleep
+from shutil import move
 
 import logging
+
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
@@ -10,13 +12,15 @@ source_dir = 'C:\\Users\\Ash\\Downloads'
 
 audio_extensions = [".m4a", ".flac", "mp3", ".wav", ".wma", ".aac"]
 
-video_extensions = [".webm", ".mpg", ".mp2", ".mpeg", ".mpe", ".mpv", ".ogg",
-                    ".mp4", ".mp4v", ".m4v", ".avi", ".wmv", ".mov", ".qt", ".flv", ".swf", ".avchd"]
+video_extensions = [".webm", ".mpg", ".mp2", ".mpeg", ".mpe", ".mpv", ".ogg",".mp4", ".mp4v", ".m4v", ".avi", 
+                    ".wmv", ".mov", ".qt", ".flv", ".swf", ".avchd"]
 
 image_extensions = [".jpg", ".jpeg", ".jpe", ".jif", ".jfif", ".jfi", ".png", ".gif", ".webp", ".tiff",
                     ".tif", ".psd", ".raw", ".arw", ".cr2", ".nrw", ".k25", ".bmp", ".dib", ".heif", ".heic",
                     ".ind", ".indd", ".indt", ".jp2", ".j2k", ".jpf", ".jpf", ".jpx", ".jpm", ".mj2", ".svg",
                     ".svgz", ".ai", ".eps", ".ico"]
+                
+document_extensions = [".doc", ".docx", ".odt", ".pdf", ".xls", ".xlsx", ".ppt", ".pptx"]
 
 def move_file(dest, entry):
     if exists(f"{dest}/{name}"):
@@ -58,6 +62,12 @@ class MoverHandler(FileSystemEventHandler){
             if name.endswith(image_extension) or name.endswith(image_extension.upper()):
                 move_file(dest_dir_image, entry, name)
                 logging.info(f"Moved image file: {name}")
+
+    def check_document_files(self, entry, name):
+        for documents_extension in document_extensions:
+            if name.endswith(documents_extension) or name.endswith(documents_extension.upper()):
+                move_file(dest_dir_documents, entry, name)
+                logging.info(f"Moved document file: {name}")
 
 }
 
