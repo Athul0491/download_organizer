@@ -24,6 +24,8 @@ document_extensions = [".doc", ".docx", ".odt", ".pdf", ".xls", ".xlsx", ".ppt",
 
 compressed_extensions = [".7z", ".arj", ".deb", ".pkg", ".rar", ".rpm", ".tar.gz", ".z", ".zip"]
 
+executable_extensions = [".apk", ".bat", ".bin", ".cgi", ".pl", ".com", ".exe", ".gadget", ".jar", ".msi", ".py", ".wsf"]
+
 def make_unique(dest, name):
     filename, extension = splitext(name)
     counter = 1
@@ -86,6 +88,11 @@ class MoverHandler(FileSystemEventHandler){
                 move_file(dest_dir_compressed, entry, name)
                 logging.info(f"Moved compressed file: {name}")
 
+    def check_executable_files(self, entry, name):
+        for executable_extension in executable_extensions:
+            if name.endswith(executable_extension) or name.endswith(executable_extension.upper()):
+                move_file(dest_dir_executable, entry, name)
+                logging.info(f"Moved executable file: {name}")
 }
 
 if __name__ == "__main__":
