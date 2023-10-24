@@ -15,6 +15,10 @@ dest_dir_music = "D:\\Downloads\\Music"
 dest_dir_video = "D:\\Downloads\\Video"
 dest_dir_image = "D:\\Downloads\\Image"
 dest_dir_documents = "D:\\Downloads\\Documents"
+dest_text_dir_documents = "D:\\Downloads\\Text_Documents"
+dest_dir_html_docs = "D:\\Downloads\\HTML_Documents"
+dest_dir_database = "D:\\Downloads\\Databases"
+dest_dir_ipynb = "D:\\Downloads\\Jupyter_Notebooks"
 dest_dir_compressed = "D:\\Downloads\\Compressed"
 dest_dir_executable = "D:\\Downloads\\Executable"
 
@@ -30,7 +34,15 @@ image_extensions = [".jpg", ".jpeg", ".jpe", ".jif", ".jfif", ".jfi", ".png", ".
                 
 document_extensions = [".doc", ".docx", ".odt", ".pdf", ".xls", ".xlsx", ".ppt", ".pptx"]
 
-compressed_extensions = [".7z", ".arj", ".deb", ".pkg", ".rar", ".rpm", ".tar.gz", ".z", ".zip"]
+text_document_extensions = [".txt", ".log", ".json", ".md", ".csv", ".xml"]
+
+html_document_extensions = [".html", ".htm"]
+
+database_extensions = [".sql"]
+
+ipynb_extensions = [".ipynb"]
+
+compressed_extensions = [".7z", ".arj", ".deb", ".pkg", ".rar", ".rpm", ".tar.gz", ".z", ".zip", ".bz2", ".xz", ".tar", ".tgz"]
 
 executable_extensions = [".apk", ".bat", ".bin", ".cgi", ".pl", ".com", ".exe", ".gadget", ".jar", ".msi", ".py", ".wsf"]
 
@@ -66,6 +78,10 @@ class MoverHandler(FileSystemEventHandler):
                 self.check_video_files(entry, name)
                 self.check_image_files(entry, name)
                 self.check_document_files(entry, name)
+                self.check_text_document_files(entry, name)
+                self.check_html_document_files(entry, name)
+                self.check_database_files(entry, name)
+                self.check_ipynb_files(entry, name)
                 self.check_compressed_files(entry, name)
                 self.check_executable_files(entry, name)
 
@@ -96,6 +112,30 @@ class MoverHandler(FileSystemEventHandler):
             if name.endswith(documents_extension) or name.endswith(documents_extension.upper()):
                 move_file(dest_dir_documents, entry, name)
                 logging.info(f"Moved document file: {name}")
+
+    def check_text_document_files(self, entry, name):
+        for text_documents_extension in text_document_extensions:
+            if name.endswith(text_documents_extension) or name.endswith(text_documents_extension.upper()):
+                move_file(dest_text_dir_documents, entry, name)
+                logging.info(f"Moved text document file: {name}")
+
+    def check_html_document_files(self, entry, name):
+        for html_document_extension in html_document_extensions:
+            if name.endswith(html_document_extension) or name.endswith(html_document_extension.upper()):
+                move_file(dest_dir_html_docs, entry, name)
+                logging.info(f"Moved html document file: {name}")
+    
+    def check_database_files(self, entry, name):
+        for database_extension in database_extensions:
+            if name.endswith(database_extension) or name.endswith(database_extension.upper()):
+                move_file(dest_dir_database, entry, name)
+                logging.info(f"Moved database file: {name}")
+    
+    def check_ipynb_files(self, entry, name):
+        for ipynb_extension in ipynb_extensions:
+            if name.endswith(ipynb_extension) or name.endswith(ipynb_extension.upper()):
+                move_file(dest_dir_ipynb, entry, name)
+                logging.info(f"Moved ipynb file: {name}")
     
     def check_compressed_files(self, entry, name):
         for compressed_extension in compressed_extensions:
