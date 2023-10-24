@@ -2,13 +2,14 @@ from os import scandir, rename
 from os.path import join, exists
 from time import sleep
 from shutil import move
-
+import os
+import shutil
 import logging
 
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
-source_dir = 'D:\\Downloads'
+source_dir = "D:\\Downloads"
 dest_dir_sfx = "D:\\Downloads\\SFX"
 dest_dir_music = "D:\\Downloads\\Music"
 dest_dir_video = "D:\\Downloads\\Video"
@@ -34,24 +35,31 @@ compressed_extensions = [".7z", ".arj", ".deb", ".pkg", ".rar", ".rpm", ".tar.gz
 executable_extensions = [".apk", ".bat", ".bin", ".cgi", ".pl", ".com", ".exe", ".gadget", ".jar", ".msi", ".py", ".wsf"]
 
 def make_unique(dest, name):
-    filename, extension = splitext(name)
+    filename, extension = os.path.splitext(name)
     counter = 1
-    while exists(f"{dest}/{name}"):
-        name = f"{filename}({str(counter)}){extension}"
+    while os.path.exists(os.path.join(dest, name)):
+        name = f"{filename} ({counter}){extension}"
         counter += 1
     return name
 
-def move_file(dest, entry):
-    if exists(f"{dest}/{name}"):
-        unique_name = make_unique(dest, name)
-        oldName = join(dest, name)
-        newName = join(dest, unique_name)
-        rename(oldName, newName)
-    move(entry, dest)
+def move_file(dest, entry, name):
+    try:
+        if not os.path.exists(dest):
+            os.makedirs(dest)
 
-class MoverHandler(FileSystemEventHandler){
+        if not os.path.exists(os.path.join(dest, name)):
+            shutil.move(entry.path, os.path.join(dest, name))
+
+        else:
+            unique_name = make_unique(dest, name)
+            shutil.move(entry.path, os.path.join(dest, unique_name))
+    except Exception as e:
+        logging.error(f'move() -> destination {dest}; entry {entry}; name {name}')
+        logging.error(f'Exception throwed: {e}')
+
+class MoverHandler(FileSystemEventHandler):
     def on_modified(self, event):
-        with os.scandir(source_dir) as entries:
+        with scandir(source_dir) as entries:
             for entry in entries:
                 name = entry.name
                 self.check_audio_files(entry, name)
@@ -100,7 +108,7 @@ class MoverHandler(FileSystemEventHandler){
             if name.endswith(executable_extension) or name.endswith(executable_extension.upper()):
                 move_file(dest_dir_executable, entry, name)
                 logging.info(f"Moved executable file: {name}")
-}
+
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO,
