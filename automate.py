@@ -1,7 +1,4 @@
-from os import scandir, rename
-from os.path import join, exists
 from time import sleep
-from shutil import move
 import os
 import shutil
 import logging
@@ -30,7 +27,7 @@ video_extensions = [".webm", ".mpg", ".mp2", ".mpeg", ".mpe", ".mpv", ".ogg",".m
 image_extensions = [".jpg", ".jpeg", ".jpe", ".jif", ".jfif", ".jfi", ".png", ".gif", ".webp", ".tiff",
                     ".tif", ".psd", ".raw", ".arw", ".cr2", ".nrw", ".k25", ".bmp", ".dib", ".heif", ".heic",
                     ".ind", ".indd", ".indt", ".jp2", ".j2k", ".jpf", ".jpf", ".jpx", ".jpm", ".mj2", ".svg",
-                    ".svgz", ".ai", ".eps", ".ico"]
+                    ".svgz", ".ai", ".eps", ".ico", ".avif"]
                 
 document_extensions = [".doc", ".docx", ".odt", ".pdf", ".xls", ".xlsx", ".ppt", ".pptx"]
 
@@ -71,7 +68,7 @@ def move_file(dest, entry, name):
 
 class MoverHandler(FileSystemEventHandler):
     def on_modified(self, event):
-        with scandir(source_dir) as entries:
+        with os.scandir(source_dir) as entries:
             for entry in entries:
                 name = entry.name
                 self.check_audio_files(entry, name)
