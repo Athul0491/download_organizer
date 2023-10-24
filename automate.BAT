@@ -2,5 +2,5 @@
 
 @echo off
 
-cd "D:\Athul\projects\downloads_organizer"
+cd "ENTER_YOUR_FILE_PATH_HERE"
 python "automate.py"
